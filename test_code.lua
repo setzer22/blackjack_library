@@ -391,42 +391,6 @@ local test_channel_nodes = {
         },
         returns = "out_mesh",
     },
-    PointCloud = {
-        label = "Point cloud",
-        op = function(inputs)
-            return { out_mesh = inputs.mesh:point_cloud(inputs.points) }
-        end,
-        inputs = {
-            P.mesh("mesh"),
-            P.selection("points"),
-        },
-        outputs = {
-            P.mesh("out_mesh"),
-        },
-        returns = "out_mesh",
-    },
-    RandomizeSize = {
-        label = "Randomize size",
-        op = function(inputs)
-            local mesh = inputs.mesh:clone()
-            local size_ch = mesh:ensure_channel(Types.VERTEX_ID, Types.F32, "size")
-            math.randomseed(inputs.seed)
-            for i = 0, #size_ch do
-                size_ch[i] = math.random() * inputs.scale
-            end
-            mesh:set_channel(Types.VERTEX_ID, Types.F32, "size", size_ch)
-            return { out_mesh = mesh }
-        end,
-        inputs = {
-            P.mesh("mesh"),
-            P.scalar("scale", { default = 1.0, min = 0.0, max = 2.0 }),
-            P.scalar("seed", { default = 0.0, min = 0.0, max = 100.0 }),
-        },
-        outputs = {
-            P.mesh("out_mesh"),
-        },
-        returns = "out_mesh",
-    },
 }
 
 NodeLibrary:addNodes(test_channel_nodes)
